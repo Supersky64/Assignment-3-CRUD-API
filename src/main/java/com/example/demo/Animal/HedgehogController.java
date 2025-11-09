@@ -76,8 +76,8 @@ public class HedgehogController {
    * @param age Age of the hedgehog to get
    * @return The hedgehog with the wanted age
    */
-    @GetMapping("/students/honors")
-  public Object getHonorsStudents(@RequestParam(name = "age", defaultValue = "1.0") double age) {
+    @GetMapping("/hedgehog/age")
+  public Object getHedgehogbyAge(@RequestParam(name = "age", defaultValue = "1.0") double age) {
     return new ResponseEntity<>(hedgehogService.getHedgehogbyAge(age), HttpStatus.OK);
     }
 
