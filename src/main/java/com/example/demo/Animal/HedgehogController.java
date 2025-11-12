@@ -26,7 +26,7 @@ public class HedgehogController {
      * @return List of all hedgehogs
      */
 
-     @GetMapping("/hedgehogs")
+     @GetMapping("/hedgehog")
      public Object getAllHedgehogs() {
          return hedgehogService.getAllHedgehogs();
      }
