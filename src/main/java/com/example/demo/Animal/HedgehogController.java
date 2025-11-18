@@ -2,9 +2,9 @@ package com.example.demo.Animal;
 
 import java.io.IOException;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 
-@RestController
+@Controller
 public class HedgehogController {
 
     @Autowired
@@ -27,8 +28,11 @@ public class HedgehogController {
      */
 
      @GetMapping("/hedgehog")
-     public Object getAllHedgehogs() {
-         return hedgehogService.getAllHedgehogs();
+     public Object getAllHedgehogs(Model model) {
+        // return hedgehogService.getAllHedgehogs();
+        model.addAttribute("hedgehogList", hedgehogService.getAllHedgehogs());
+        model.addAttribute("title", "All Hedgehogs");
+        return "hedgehogs-list";
      }
 
      /**
@@ -39,8 +43,11 @@ public class HedgehogController {
    */
 
     @GetMapping("/hedgehog/{id}")
-    public Object getHedgehogbyId(@PathVariable long id) {
-        return hedgehogService.getHedgehogbyId(id);
+    public Object getHedgehogbyId(@PathVariable long id, Model model) {
+        //return hedgehogService.getHedgehogbyId(id);
+        model.addAttribute("hedgehog", hedgehogService.getHedgehogbyId(id));
+        model.addAttribute("title", "Hedgehog #: " + id);
+        return "hedgehog-details";
     }
 
     /**
@@ -49,11 +56,13 @@ public class HedgehogController {
    * @return The hedgehog with the wanted name
    */
     @GetMapping("/hedgehog/name")
-    public Object getHedgehogByName(@RequestParam String name) {
+    public Object getHedgehogByName(@RequestParam String name, Model model) {
         if (name != null) {
-            return hedgehogService.getHedgehogbyName(name);
+            model.addAttribute("hedgehogList", hedgehogService.getHedgehogbyName(name));
+            model.addAttribute("title", "Hedgehog By Name: " + name);
+            return "hedgehog-list";
         } else {
-            return hedgehogService.getAllHedgehogs();
+            return "redirect:/hedgehog";
         }
     }
 
@@ -63,11 +72,13 @@ public class HedgehogController {
    * @return The hedgehog with the wanted breed
    */
     @GetMapping("/hedgehog/breed/{breed}")
-    public Object getHedgehogbyBreed(@PathVariable String breed) {
+    public Object getHedgehogbyBreed(@PathVariable String breed, Model model) {
         if (breed != null) {
-            return hedgehogService.getHedgehogbyBreed(breed);
+            model.addAttribute("hedgehogList", hedgehogService.getHedgehogbyBreed(breed));
+            model.addAttribute("title", "Hedgehog By Breed: " + breed);
+            return "hedgehog-list";
         } else {
-            return hedgehogService.getAllHedgehogs();
+            return "redirect:/hedgehog";
         }
     }
 
@@ -77,8 +88,20 @@ public class HedgehogController {
    * @return The hedgehog with the wanted age
    */
     @GetMapping("/hedgehog/age")
-  public Object getHedgehogbyAge(@RequestParam(name = "age", defaultValue = "1.0") double age) {
-    return new ResponseEntity<>(hedgehogService.getHedgehogbyAge(age), HttpStatus.OK);
+  public Object getHedgehogbyAge(@RequestParam(name = "age", defaultValue = "1.0") double age, Model model) {
+    //return new ResponseEntity<>(hedgehogService.getHedgehogbyAge(age), HttpStatus.OK);
+
+    model.addAttribute("hedgehogList", hedgehogService.getHedgehogbyAge(age));
+    model.addAttribute("title", "Age of Hedgehog");
+    return "hedgehog-list";
+    }
+
+     @GetMapping("/hedgehog/createForm")
+    public Object showCreateForm(Model model) {
+        Hedgehog newHedgehog = new Hedgehog();
+        model.addAttribute("hedgehog", newHedgehog);
+        model.addAttribute("title", "Create Hedgehog");
+        return "hedgehog-create";
     }
 
     /**
