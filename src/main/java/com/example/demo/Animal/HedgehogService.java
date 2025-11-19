@@ -69,6 +69,16 @@ public class HedgehogService {
         return hedgehogRepo.getHedgehogsbyAge(age);
     }
 
+     /**
+   * Method to get animal by image in the database
+   * @param image Image URL of the animal to get
+   * @return animal with the specified image
+   */
+    public Object getAnimalByImage(String image) {
+        return hedgehogRepo.getHedgehogbyImage(image);
+    }
+
+
     /**
      * Method to create new hedgehog in the database
      * 

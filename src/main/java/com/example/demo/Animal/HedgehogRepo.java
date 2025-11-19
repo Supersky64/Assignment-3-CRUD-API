@@ -15,4 +15,7 @@ public interface HedgehogRepo extends JpaRepository<Hedgehog, Long> {
 
      @Query(value = "Select * from hedgehogs s where s.name like CONCAT('%',?1,'%')", nativeQuery = true)
      List<Hedgehog> getHedgehogsbyName(String name);
+
+      @Query(value = "Select * from animals s where s.image like CONCAT('%',?1,'%')", nativeQuery = true)
+    List<Hedgehog> getHedgehogbyImage(String image);
 }

@@ -1,16 +1,13 @@
 package com.example.demo.Animal;
 
-import java.io.IOException;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -96,6 +93,23 @@ public class HedgehogController {
     return "hedgehog-list";
     }
 
+
+     /**
+   * Endpoint to get the image of a animal in the database
+   * @param image Image URL of the animal to get
+   * @return The animal with the wanted image
+   */
+    @GetMapping("/hedgehog/image")
+    public Object getAnimalByImage(@RequestParam String image, Model model) {
+        if (image != null) {
+            model.addAttribute("hedgehog", hedgehogService.getAnimalByImage(image));
+            model.addAttribute("title", "Hedgehog by Image: " + image);
+            return "hedgehog-list";
+        } else {
+            return "redirect:/hedgehog";
+        }
+    }
+
      @GetMapping("/hedgehog/createForm")
     public Object showCreateForm(Model model) {
         Hedgehog newHedgehog = new Hedgehog();
@@ -110,8 +124,17 @@ public class HedgehogController {
    * @return added hedgehog
    */
     @PostMapping("/hedgehog")
-    public Object createHedgehog(@RequestBody Hedgehog hedgehog) {
-        return hedgehogService.createHedgehog(hedgehog);
+    public Object createHedgehog(Hedgehog hedgehog) {
+        Hedgehog newHedgehog = hedgehogService.createHedgehog(hedgehog);
+        return "redirect:/hedgehog/" + newHedgehog.getHedgehogId();
+    }
+
+    @GetMapping("/hedgehog/updateForm/{id}")
+    public Object showupdateHedgehog(@PathVariable Long id, Model model) {
+        Hedgehog hedgehog = hedgehogService.getHedgehogbyId(id);
+        model.addAttribute("hedgehog", hedgehog);
+        model.addAttribute("title", "Update Hedgehog: " + id);
+        return "hedgehog-update";
     }
 
     /**
@@ -120,39 +143,24 @@ public class HedgehogController {
    * @param hedgehog Hedgehog to update
    * @return updated hedgehog
    */
-    @PutMapping("/hedgehog/{id}")
-    public Hedgehog updateHedgehog(@PathVariable Long id, @RequestBody Hedgehog hedgehog) {
-        return hedgehogService.updateHedgehog(id, hedgehog);
+    @PostMapping("/hedgehog/update/{id}")
+    public Object updateHedgehog(@PathVariable Long id, Hedgehog hedgehog) {
+        hedgehogService.updateHedgehog(id, hedgehog);
+        return "redirect:/hedgehog/" + id;
     }
+
+
 
     /**
    * Endpoint to delete a hedgehog in the database
    * @param id ID of the hedgehog to delete
    * @return list of hedgehogs in database after deletion
    */
-    @DeleteMapping("/hedgehog/{id}")
+    @GetMapping("/hedgehog/delete/{id}")
     public Object deleteHedgehog(@PathVariable Long id) {
         hedgehogService.deleteHedgehog(id);
-        return hedgehogService.getAllHedgehogs();
+        return "redirect:/hedgehog";
     }
 
-    /**
-   * Endpoint to write hedgehog in JSON file
-   * @param hedgehog Hedgehog to write
-   * @return success message (empty string if successful)
-   */
-    @PostMapping("/hedgehog/write")
-    public Object writeJson(@RequestBody Hedgehog hedgehog) throws IOException {
-        return hedgehogService.writeJson(hedgehog);
-    }
-
-    /**
-   * Endpoint read Hedgehog JSON file contents
-   * @return contents in JSON
-   */
-    @PostMapping("/hedgehog/read")
-    public Object readJson() throws IOException {
-        return hedgehogService.readJson();
-    }
      
 }
