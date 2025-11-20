@@ -19,6 +19,7 @@ public class Hedgehog {
     private String description;
     private String breed;
     private double age;
+    private String image;
 
 
     public Hedgehog(){
@@ -81,5 +82,13 @@ public class Hedgehog {
     public void setAge(double age){
         this.age = age;
     }
+
+    public String getImage() {
+    return image;
+}
+
+public void setImage(String image) {
+    this.image = image;
+}
 
 }

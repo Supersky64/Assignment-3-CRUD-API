@@ -27,9 +27,9 @@ public class HedgehogController {
      @GetMapping("/hedgehog")
      public Object getAllHedgehogs(Model model) {
         // return hedgehogService.getAllHedgehogs();
-        model.addAttribute("hedgehogList", hedgehogService.getAllHedgehogs());
+        model.addAttribute("hedgehogs", hedgehogService.getAllHedgehogs());
         model.addAttribute("title", "All Hedgehogs");
-        return "hedgehogs-list";
+        return "hedgehog-list";
      }
 
      /**
@@ -102,7 +102,7 @@ public class HedgehogController {
     @GetMapping("/hedgehog/image")
     public Object getAnimalByImage(@RequestParam String image, Model model) {
         if (image != null) {
-            model.addAttribute("hedgehog", hedgehogService.getAnimalByImage(image));
+            model.addAttribute("hedgehog", hedgehogService.getHedgehogByImage(image));
             model.addAttribute("title", "Hedgehog by Image: " + image);
             return "hedgehog-list";
         } else {

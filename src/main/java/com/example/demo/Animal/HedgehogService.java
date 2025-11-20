@@ -74,7 +74,7 @@ public class HedgehogService {
    * @param image Image URL of the animal to get
    * @return animal with the specified image
    */
-    public Object getAnimalByImage(String image) {
+    public Object getHedgehogByImage(String image) {
         return hedgehogRepo.getHedgehogbyImage(image);
     }
 
